@@ -44,7 +44,47 @@
 
   </div>
 
+<div class="overlay hidden"></div>
+
+<div class="modal hidden">
+
+    <h2>Add New Task</h2>
+
+    <input
+        type="text"
+        placeholder="Task title"
+        class="task-title">
+    <p class="error"></p>
+
+    <textarea
+        placeholder="Description"
+        class="task-description"></textarea>
+
+    <select class="priority">
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+    </select>
+
+    <input
+        type="date"
+        class="due-date">
+
+    <div class="buttons">
+
+        <button class="cancel-btn">
+            Cancel
+        </button>
+
+        <button class="create-btn">
+            Create Task
+        </button>
+
+    </div>
+
+</div>
+
 </body>
 
-<style src="script.js"></style>
+<script src="script.js"></script>
 </html>
