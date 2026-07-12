@@ -1,4 +1,4 @@
-console.log("bruh");
+let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
 let cancel = document.querySelector('.cancel-btn');
 let modal = document.querySelector('.modal');
 let overlay = document.querySelector('.overlay');
@@ -10,8 +10,39 @@ let priority = document.querySelector('.priority');
 let date = document.querySelector('.due-date');
 let error = document.querySelector('.error');
 let taskToDo = document.querySelector('.tasks');
-console.log(taskToDo)
 
+tasks.forEach((task) => {
+  taskCreation(task);
+})
+
+function taskCreation(task){
+  const taskCard = document.createElement('div');
+  taskCard.classList.add("task-card");
+
+  taskCard.innerHTML = `
+  <h3>${task.title}</h3>
+
+  <p>${task.description}</p>
+
+  <div class="task-footer">
+
+      <span>${task.priority}</span>
+
+      <span>${task.date}</span>
+
+      <button class='delete'>🗑️</button>
+
+  </div>`;
+
+      const taskDelete = taskCard.querySelector('.delete');
+      taskDelete.addEventListener('click', ()=>{
+      taskCard.remove()
+      tasks = tasks.filter((i) => {
+        return i !== task;});
+        localStorage.setItem("myTasks", JSON.stringify(tasks));
+      });
+
+      taskToDo.appendChild(taskCard);}
 
 addBtn.forEach((button) => {
   button.addEventListener('click', ()=> {
@@ -33,42 +64,24 @@ createBtn.addEventListener('click', ()=>{
   }else{
     title.style.border = '';
     error.innerHTML = '';
-  /*
-    console.log(title.value);
-    console.log(description.value);
-    console.log(priority.value);
-    console.log(date.value); */
 
-    const taskCard = document.createElement('div');
-    taskCard.classList.add("task-card");
-    const taskTitle = title.value;
-    const taskDescription = description.value;
-    const taskPriority = priority.value;
-    const taskDate = date.value;
-
-    taskCard.innerHTML = `
-    <h3>${taskTitle}</h3>
-
-    <p>${taskDescription}</p>
-
-    <div class="task-footer">
-
-        <span>${taskPriority}</span>
-
-        <span>${taskDate}</span>
-
-        <button class='delete'>🗑️</button>
-
-    </div>`;
-
-    const taskDelete = taskCard.querySelector('.delete');
-    taskDelete.addEventListener('click', ()=>{
-    taskCard.remove()});
-
-    taskToDo.appendChild(taskCard);
+    const newTask = {
+    title: title.value,
+    description: description.value,
+    priority: priority.value,
+    date: date.value
+    };
+    
+    tasks.push(newTask);
+    localStorage.setItem("myTasks", JSON.stringify(tasks));
+      
+    taskCreation(newTask);
+    
     title.value = '';
     description.value = '';
     date.value = '';
+    modal.classList.add("hidden");
+    overlay.classList.add("hidden");
 }})
 
 
