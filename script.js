@@ -57,10 +57,22 @@ createBtn.addEventListener('click', ()=>{
 
         <span>${taskDate}</span>
 
-    </div>
-    `;
+        <button class='delete'>🗑️</button>
+
+    </div>`;
+
+    const taskDelete = taskCard.querySelector('.delete');
+    taskDelete.addEventListener('click', ()=>{
+    taskCard.remove()});
+
     taskToDo.appendChild(taskCard);
+    title.value = '';
+    description.value = '';
+    date.value = '';
 }})
+
+
+
 
 
 
