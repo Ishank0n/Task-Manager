@@ -24,6 +24,21 @@ function updateToggleIcon() {
   themeToggle.textContent = isDark ? '☀️' : '🌙';
 }
 
+// Key Board Functions//
+
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape'){
+
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+  }
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'Enter'){
+    createBtn.click();
+  }
+} )
+})
+
 //Rest of the code//
 
 let draggedTaskData = null;
@@ -173,9 +188,4 @@ createBtn.addEventListener('click', ()=>{
     
         
 })
-
-
-
-
-
 
