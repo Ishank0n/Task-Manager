@@ -87,7 +87,6 @@ function taskCreation(task){
   taskCard.addEventListener('dragstart',()=>{
     draggedTask = taskCard;
     draggedTaskData = task;
-    console.log(draggedTask);
   })
 
   taskCard.innerHTML = `
