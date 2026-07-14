@@ -245,7 +245,7 @@ body > * { position: relative; z-index: 1; }
   font-variant-numeric: tabular-nums;
 }
 
-.delete {
+.delete, .edit, .theme-btn{
   background: none;
   border: none;
   cursor: pointer;
@@ -256,7 +256,7 @@ body > * { position: relative; z-index: 1; }
   opacity: 0.5;
   transition: opacity 0.18s var(--ease), background 0.18s var(--ease), transform 0.18s var(--ease);
 }
-.delete:hover {
+.delete:hover, .edit:hover, .theme-btn:hover {
   opacity: 1;
   background: var(--rose-bg);
   transform: scale(1.08);
@@ -436,4 +436,547 @@ body > * { position: relative; z-index: 1; }
   .board { grid-template-columns: 1fr; max-width: 480px; }
   .column { max-height: none; }
   body { padding: 40px 20px 56px; }
+}
+
+/* Dark mode css */
+
+/* =============================================================
+   TASK MANAGER — "Aurora Glass" theme (light + dark)
+   A light, airy workspace: soft mesh-gradient sky, frosted glass
+   panels, and status-tinted ambient glow behind each column.
+   Toggle via the button (top-right) — persists in localStorage.
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* base */
+  --bg-base:   #F6F7FC;
+  --ink:       #1E2233;
+  --ink-muted: rgba(30, 34, 51, 0.56);
+  --ink-faint: rgba(30, 34, 51, 0.36);
+
+  /* glass */
+  --glass-panel:   rgba(255, 255, 255, 0.45);
+  --glass-card:    rgba(255, 255, 255, 0.72);
+  --glass-border:  rgba(255, 255, 255, 0.65);
+  --glass-shadow:  rgba(31, 41, 71, 0.10);
+
+  /* overlay / modal / inputs */
+  --overlay-bg:  rgba(246, 247, 252, 0.6);
+  --modal-bg:    rgba(255, 255, 255, 0.75);
+  --modal-border:rgba(255, 255, 255, 0.85);
+  --input-bg:    rgba(255, 255, 255, 0.7);
+  --input-border:rgba(30, 34, 51, 0.12);
+
+  /* accent palette */
+  --violet:      #7C6FEA;
+  --violet-deep: #5F4FDB;
+  --sky:         #4FA8E0;
+  --rose:        #EF6280;
+  --rose-bg:     rgba(239, 98, 128, 0.14);
+  --amber:       #E7A53B;
+  --amber-bg:    rgba(231, 165, 59, 0.16);
+  --mint:        #2AAE8A;
+  --mint-bg:     rgba(42, 174, 138, 0.15);
+  --violet-bg:   rgba(124, 111, 234, 0.14);
+
+  /* aurora mesh + per-column glow */
+  --mesh-violet: rgba(124, 111, 234, 0.28);
+  --mesh-sky:    rgba(79, 168, 224, 0.24);
+  --mesh-rose:   rgba(239, 98, 128, 0.18);
+  --mesh-mint:   rgba(42, 174, 138, 0.18);
+
+  --col-glow-1: rgba(239, 98, 128, 0.16);
+  --col-glow-2: rgba(231, 165, 59, 0.16);
+  --col-glow-3: rgba(42, 174, 138, 0.16);
+
+  --scrollbar-thumb: rgba(124, 111, 234, 0.28);
+
+  /* theme toggle */
+  --toggle-bg:     rgba(255, 255, 255, 0.5);
+  --toggle-border: rgba(255, 255, 255, 0.7);
+
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 11px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------- dark theme overrides ---------------------------- */
+
+:root[data-theme="dark"] {
+  --bg-base:   #0C0E1C;
+  --ink:       #ECEEFB;
+  --ink-muted: rgba(236, 238, 251, 0.60);
+  --ink-faint: rgba(236, 238, 251, 0.38);
+
+  --glass-panel:  rgba(255, 255, 255, 0.055);
+  --glass-card:   rgba(255, 255, 255, 0.085);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: rgba(0, 0, 0, 0.45);
+
+  --overlay-bg:   rgba(6, 7, 15, 0.65);
+  --modal-bg:     rgba(18, 20, 36, 0.82);
+  --modal-border: rgba(255, 255, 255, 0.14);
+  --input-bg:     rgba(255, 255, 255, 0.06);
+  --input-border: rgba(255, 255, 255, 0.16);
+
+  --violet:      #9C90F5;
+  --violet-deep: #7A6EF0;
+  --sky:         #74C1F0;
+  --rose:        #F385A0;
+  --rose-bg:     rgba(243, 133, 160, 0.20);
+  --amber:       #F0BE6B;
+  --amber-bg:    rgba(240, 190, 107, 0.20);
+  --mint:        #55D2AB;
+  --mint-bg:     rgba(85, 210, 171, 0.18);
+  --violet-bg:   rgba(156, 144, 245, 0.20);
+
+  --mesh-violet: rgba(140, 120, 255, 0.35);
+  --mesh-sky:    rgba(90, 180, 240, 0.28);
+  --mesh-rose:   rgba(240, 110, 150, 0.22);
+  --mesh-mint:   rgba(60, 200, 160, 0.20);
+
+  --col-glow-1: rgba(243, 133, 160, 0.20);
+  --col-glow-2: rgba(240, 190, 107, 0.20);
+  --col-glow-3: rgba(85, 210, 171, 0.20);
+
+  --scrollbar-thumb: rgba(156, 144, 245, 0.35);
+
+  --toggle-bg:     rgba(255, 255, 255, 0.08);
+  --toggle-border: rgba(255, 255, 255, 0.16);
+}
+
+* { box-sizing: border-box; }
+
+/* =============================== page shell =============================== */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: var(--ink);
+  padding: 56px 40px 64px;
+  background: var(--bg-base);
+  position: relative;
+  overflow-x: hidden;
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+/* soft drifting aurora mesh, sits behind everything */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 30% at 12% 12%, var(--mesh-violet), transparent 70%),
+    radial-gradient(34% 28% at 88% 8%,  var(--mesh-sky),    transparent 70%),
+    radial-gradient(40% 34% at 82% 88%, var(--mesh-rose),   transparent 70%),
+    radial-gradient(36% 30% at 8% 85%,  var(--mesh-mint),   transparent 70%);
+  filter: blur(10px);
+  animation: drift 26s ease-in-out infinite alternate;
+  transition: background 0.4s var(--ease);
+}
+
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-1.5%, 1.5%, 0) scale(1.04); }
+}
+
+body > * { position: relative; z-index: 1; }
+
+/* ---------------------------- theme toggle ---------------------------- */
+
+.theme-toggle {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  z-index: 60;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  border-radius: 50%;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.2s var(--ease);
+}
+.theme-toggle:hover { transform: translateY(-2px) scale(1.05); }
+
+/* =============================== heading =============================== */
+
+.heading {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  letter-spacing: -0.01em;
+  text-align: center;
+  margin: 0 0 8px;
+  background: linear-gradient(100deg, var(--violet-deep), var(--sky) 55%, var(--rose));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heading::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 18px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--violet), var(--rose));
+  opacity: 0.55;
+}
+
+/* =============================== board =============================== */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 44px auto 0;
+}
+
+.column {
+  background: var(--glass-panel);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+  max-height: calc(100vh - 220px);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  box-shadow: 0 20px 50px var(--glass-shadow);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+              box-shadow 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.column:hover { transform: translateY(-2px); }
+
+/* status-tinted ambient glow, matched to each lane's own colour */
+.column:nth-child(1) { box-shadow: 0 22px 55px var(--col-glow-1), 0 1px 0 var(--glass-border) inset; }
+.column:nth-child(2) { box-shadow: 0 22px 55px var(--col-glow-2), 0 1px 0 var(--glass-border) inset; }
+.column:nth-child(3) { box-shadow: 0 22px 55px var(--col-glow-3), 0 1px 0 var(--glass-border) inset; }
+
+.column h2 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--glass-card);
+  border: 1px solid var(--glass-border);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+/* ---------------------------- task list ---------------------------- */
+
+.tasks {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+  margin-bottom: 14px;
+}
+
+.tasks::-webkit-scrollbar { width: 6px; }
+.tasks::-webkit-scrollbar-track { background: transparent; }
+.tasks::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+.tasks { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+
+/* ---------------------------- task card ---------------------------- */
+
+.task-card {
+  position: relative;
+  background: var(--glass-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 24px rgba(31, 41, 71, 0.08);
+  animation: card-in 0.32s var(--ease);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+              transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(31, 41, 71, 0.12);
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.task-card h3 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+
+.task-card p {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin: 0 0 14px;
+}
+
+.task-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.priority-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--violet-bg);
+  color: var(--violet-deep);
+}
+.priority-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.priority-tag[data-priority="High"]   { background: var(--rose-bg);  color: var(--rose); }
+.priority-tag[data-priority="Medium"] { background: var(--amber-bg); color: var(--amber); }
+.priority-tag[data-priority="Low"]    { background: var(--mint-bg);  color: var(--mint); }
+
+.date-tag {
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px 6px;
+  border-radius: 50%;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity 0.18s var(--ease), background 0.18s var(--ease), transform 0.18s var(--ease);
+}
+.delete:hover {
+  opacity: 1;
+  background: var(--rose-bg);
+  transform: scale(1.08);
+}
+
+/* ---------------------------- add button ---------------------------- */
+
+.add-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--glass-panel);
+  border: 1.5px dashed var(--violet);
+  border-radius: var(--radius-sm);
+  color: var(--violet-deep);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+.add-btn:hover {
+  background: var(--violet-bg);
+  opacity: 1;
+}
+
+/* =============================== overlay + modal =============================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 1;
+  transition: opacity 0.25s var(--ease), background 0.4s var(--ease);
+  z-index: 40;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 90%;
+  max-width: 420px;
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  backdrop-filter: blur(26px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 24px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+  opacity: 1;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease),
+              background 0.4s var(--ease), border-color 0.4s var(--ease);
+  z-index: 50;
+}
+
+.overlay.hidden,
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.modal.hidden { transform: translate(-50%, -50%) scale(0.96); }
+
+.modal h2 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease), background 0.4s var(--ease);
+}
+
+.modal input::placeholder,
+.modal textarea::placeholder { color: var(--ink-faint); }
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  outline: none;
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px var(--violet-bg);
+}
+
+.task-title[style*="border: 1px solid red"] { border-color: var(--rose) !important; }
+
+.modal textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.modal select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%235F4FDB'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 34px;
+  cursor: pointer;
+}
+
+.modal .due-date { cursor: pointer; }
+:root[data-theme="dark"] .modal .due-date::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+.error {
+  min-height: 1.1em;
+  margin: -4px 0 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--rose);
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.cancel-btn,
+.create-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease), background 0.3s var(--ease);
+}
+
+.cancel-btn {
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  color: var(--ink-muted);
+}
+.cancel-btn:hover { background: var(--glass-card); }
+
+.create-btn {
+  border: none;
+  background: linear-gradient(135deg, var(--violet), var(--sky));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(124, 111, 234, 0.38);
+}
+.create-btn:hover  { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(124, 111, 234, 0.46); }
+.create-btn:active { transform: translateY(0); }
+
+/* =============================== a11y & motion =============================== */
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  body::before { animation: none; }
+}
+
+/* =============================== responsive =============================== */
+
+@media (max-width: 860px) {
+  .board { grid-template-columns: 1fr; max-width: 480px; }
+  .column { max-height: none; }
+  body { padding: 40px 20px 56px; }
+  .theme-toggle { top: 16px; right: 16px; }
 }
