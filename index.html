@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Manager</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style3.css">
 </head>
 <body>
 
-  <h1 class="heading">My Board</h1>
+  <h1 class="heading">Task Manager</h1>
 
   <div class="board">
 
     <div class="column">
       <h2>🔴 To Do</h2>
 
-      <div class="tasks">
+      <div class="tasks tasks-todo" data-status="todo">
 
       </div>
 
@@ -25,7 +25,7 @@
     <div class="column">
       <h2>🟡 Doing</h2>
 
-      <div class="tasks">
+      <div class="tasks tasks-doing" data-status="doing">
 
       </div>
 
@@ -35,7 +35,7 @@
     <div class="column">
       <h2>🟢 Done</h2>
 
-      <div class="tasks">
+      <div class="tasks tasks-done" data-status="done">
 
       </div>
 
